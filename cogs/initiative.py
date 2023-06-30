@@ -1,7 +1,8 @@
 from discord.ext import commands
+import discord
 import random
 
-class InitiativeTracker:
+class InitiativeTracker(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		# set globals
@@ -12,7 +13,7 @@ class InitiativeTracker:
 		turn = 0
 
     # roll initiative
-	@commands.command(name='init.roll', help='Rolls initiative for a character: !init.roll (modifier) (name)')
+	@commands.command(name='init.roll', help='(modifier) (name) Rolls initiative for a character')
 	async def init(self, ctx, modifier=0, name=''):
 		
 		# check if initiative is active
@@ -36,7 +37,7 @@ class InitiativeTracker:
 			await ctx.send(f'{name} rolled {initiative[name] - int(modifier)} - {abs(int(modifier))} = {initiative[name]}')
 
 	# start initiative
-	@commands.command(name='init.start', help='Starts initiative order: !init.start')
+	@commands.command(name='init.start', help='Starts initiative order')
 	async def start_init(self, ctx):
 		# check for keyword
 		if len(initiative) == 0:
@@ -59,7 +60,7 @@ class InitiativeTracker:
 		await ctx.send(message)
 
 	# display initiative
-	@commands.command(name='init.display', help='Displays initiative order: !init.display')
+	@commands.command(name='init.display', help='Displays initiative order')
 	async def display_init(self, ctx):
 		# check for keyword
 		if len(initiative) == 0:
@@ -75,7 +76,7 @@ class InitiativeTracker:
 		await ctx.send(message)
 
 	# next turn
-	@commands.command(name='init.next', help='Moves to next turn: !init.next')
+	@commands.command(name='init.next', help='Moves to next turn')
 	async def next_init(self, ctx):
 		# check for keyword
 		if len(initiative) == 0:
@@ -96,7 +97,7 @@ class InitiativeTracker:
 		await ctx.send(message)
 
 	# add to initiative
-	@commands.command(name='init.add', help='Adds to initiative order: !init.add (modifier) (name)')
+	@commands.command(name='init.add', help='(init) (name) Adds to initiative order')
 	async def add_init(self, ctx, init, name=''):
 		# check if initiative is active
 		if initiative_active:
@@ -116,7 +117,7 @@ class InitiativeTracker:
 		await ctx.send(f'{name} added with initiative {init}')
 
 	# remove from initiative
-	@commands.command(name='init.remove', help='Removes from initiative order: !init.remove (name)')
+	@commands.command(name='init.remove', help='(name) Removes from initiative order')
 	async def remove_init(self, ctx, name=''):
 		# check for keyword
 		if name == '':
@@ -132,7 +133,7 @@ class InitiativeTracker:
 		await ctx.send(f'{name} removed')
 
 	# clear initiative
-	@commands.command(name='init.clear', help='Clears initiative order: !init.clear')
+	@commands.command(name='init.clear', help='Clears initiative order')
 	async def clear_init(self, ctx):
 		# check for keyword
 		if len(initiative) == 0:
@@ -144,5 +145,9 @@ class InitiativeTracker:
 		# send message
 		await ctx.send('Initiative cleared')
 
-def setup(bot):
-    bot.add_cog(InitiativeTracker(bot))
+	@commands.command()
+	async def test(self, ctx):
+		await ctx.send('test')
+
+async def setup(bot):
+    await bot.add_cog(InitiativeTracker(bot))

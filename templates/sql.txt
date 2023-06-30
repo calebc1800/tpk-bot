@@ -1,0 +1,20 @@
+NOTES
+1 DATABASE
+TABLES:
+    Character_Stats
+        (Character_id, Character_name, User_id, Race, Class, Subclass, Level, Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma)....
+    Character_Items
+        (REFERENCE Character_id, Item_id, Item_Count, Item_Equipped)
+    Database_Spells
+    Database_Items
+    Database_Feats
+    #Database_Skills (its a big database, will do later)
+    Character_Spellslots
+        (REFERENCE Character_id, Spellcasting_ability, Spellslot_lvl1, Spellslot_lvl2, Spellslot_lvl3, Spellslot_lvl4, Spellslot_lvl5, Spellslot_lvl6, Spellslot_lvl7, Spellslot_lvl8, Spellslot_lvl9)
+    Character_Spells
+        (REFERENCE Character_id, REFERENCE Spell_id)
+    Character_Skills
+        (REFERENCE Character_id, REFERENCE Skill_id)
+    Combat_Character
+    Character_Feats
+        (REFERENCE Character_id, REFERENCE Feat_id)

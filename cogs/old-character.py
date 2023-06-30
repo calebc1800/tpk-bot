@@ -71,20 +71,5 @@ class CharacterSheets(commands.Cog):
             writer.writerow(writeToFile)
         await ctx.send(f'Character sheet {name} created')
 
-# takes an array as input, then asks user to select one of the options and the selected option is returned
-async def selection(choices):
-    def inner_check(m):
-        return m.author == ctx.author and m.channel == ctx.channel
-    await ctx.send('Select one of the following options')
-    for i in range(len(choices)):
-        await ctx.send(f'{i + 1}. {choices[i]}')
-    msg = await self.bot.wait_for('message', check=inner_check)
-    try:
-        return choices[int(msg.content) - 1]
-    except:
-        await ctx.send('Invalid input')
-        return
-
-
 async def setup(bot):
     await bot.add_cog(CharacterSheets(bot))

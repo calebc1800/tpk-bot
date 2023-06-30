@@ -1,8 +1,9 @@
 # bot.py
 # NOTE: Run directly using python.exe bot.py, vscode debugger will not work
 import os
+import datetime
 import random
-
+import asyncio
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -36,7 +37,7 @@ async def hello(ctx):
     await ctx.send(response)
 
 # roll dice
-@bot.command(name='r', help='Rolls dice: #d# +/- modifier')
+@bot.command(name='r', help='#d# +/- mod')
 async def roll(ctx, arg, operator='+', modifier=0):
     # check for keyword
     try:
@@ -60,10 +61,18 @@ async def roll(ctx, arg, operator='+', modifier=0):
         await ctx.send(f'Computing error')
 
 # import cogs
-for f in os.listdir("./cogs"):
-    if f.endswith(".py"):
-        bot.load_extension("cogs." + f[:-3])
-        print(f"Loaded {f}")
+async def load_cogs():
+    for f in os.listdir("./cogs"):
+        if f.endswith(".py"):
+            await bot.load_extension(f"cogs.{f[:-3]}")
+            #print load with timestamp
+            now = datetime.datetime.now()
+            print(f"{now.strftime('%Y-%m-%d %H:%M:%S')} INFO     Loaded {f}")
 
 # run bot (leave at bottom)
-bot.run(TOKEN)
+async def main():
+    await load_cogs()
+    discord.utils.setup_logging()
+    await bot.start(TOKEN)
+
+asyncio.run(main())
