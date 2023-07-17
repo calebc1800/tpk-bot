@@ -38,3 +38,5 @@ class MinecraftServer(commands.Cog):
             await ctx.send("Error stopping the server")
             # print error code
     
+async def setup(bot):
+    await bot.add_cog(MinecraftServer(bot))
