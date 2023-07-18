@@ -20,6 +20,7 @@ CREATOR_ID = os.getenv('CREATOR_ID')
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 # Server variables
+global MINECRAFT_INSTANCE_ID, BOT_INSTANCE_ID, ec2
 MINECRAFT_INSTANCE_ID = os.getenv('MINECRAFT_INSTANCE_ID')
 BOT_INSTANCE_ID = os.getenv('BOT_INSTANCE_ID')
 AWS_REGION = os.getenv('AWS_REGION')
@@ -55,6 +56,15 @@ async def hello(ctx):
     response = random.choice(possible_responses)
     await ctx.send(response)
 
+# random quote
+@bot.command(name='quote', help='Responds with a random quote')
+async def quote(ctx):
+    # reads a line from quotes.txt
+    with open('quotes.txt', 'r') as f:
+        lines = f.readlines()
+        response = random.choice(lines)
+    await ctx.send(response)
+
 # roll dice
 @bot.command(name='r', help='#d# +/- mod')
 async def roll(ctx, arg, operator='+', modifier=0):
@@ -87,11 +97,13 @@ async def stssd(ctx):
         await ctx.send('Time to shut the shit show down')
         # shutdown both the bot server and minecraft server
         try:
-            ec2.stop_instance(InstanceIds=[MINECRAFT_INSTANCE_ID], DryRun=False)
+            response = ec2.stop_instances(InstanceIds=[MINECRAFT_INSTANCE_ID], DryRun=False)
+            await ctx.send("Mine closed")
         except ClientError as e:
                 await ctx.send("Can't stop the mine!")
         try:
-            ec2.stop_instances(InstanceIds=[BOT_INSTANCE_ID], DryRun=False)
+            await ctx.send("Fairwell my friends")
+            response = ec2.stop_instances(InstanceIds=[BOT_INSTANCE_ID], DryRun=False)
         except ClientError as e:
             if 'DryRunOperation' not in str(e):
                 await ctx.send("Well shit, that didn't work.")

@@ -34,7 +34,7 @@ class MinecraftServer(commands.Cog):
         # Dry run succeeded, run start_instances again without dryrun
         try:
             response = ec2.start_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-            await ctx.send(response)
+            await ctx.send("Minecraft server started")
         except ClientError as e:
             await ctx.send(e)
     
@@ -54,7 +54,7 @@ class MinecraftServer(commands.Cog):
         # Dry run succeeded, call stop_instances without dryrun
         try:
             response = ec2.stop_instances(InstanceIds=[INSTANCE_ID], DryRun=False)
-            await ctx.send(response)
+            await ctx.send("Minecraft server stopped")
         except ClientError as e:
             await ctx.send(e)
     
