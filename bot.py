@@ -5,6 +5,7 @@ import datetime
 import random
 import asyncio
 import discord
+import logging
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -14,6 +15,13 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+
+# logging
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
 
 # dice options
 MAX_DICE = 100
@@ -25,7 +33,7 @@ MAX_MODIFIER = 100
 async def on_member_join(member):   
     await member.create_dm()
     await member.dm_channel.send(
-        f'Hi {member.name}, welcome to the Bot Testing Server!'
+        f'Hi {member.name}, welcome to {GUILD}!'
     )
 
 # hello
