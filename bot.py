@@ -63,6 +63,7 @@ async def quote(ctx):
     with open('quotes.txt', 'r') as f:
         lines = f.readlines()
         response = random.choice(lines)
+    f.close()
     await ctx.send(response)
 
 # roll dice
