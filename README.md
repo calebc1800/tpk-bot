@@ -1,2 +1,2 @@
 # tpk-bot
- D&D discord bot
+ Multifunctional discord bot

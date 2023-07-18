@@ -10,6 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated character sheets
 - Seperate commands into cogs
 - restrict commands to specific users
+- pack dependencies into a docker container
+
+## [0.1.0] - 2023-07-18
+
+### Added
+
+- Added minecraft server functions for the Monarchy server
+- Added setup script and requirements.txt for easier setup
+
+### Changed
+
+- Temp disabled other cogs besides minecraft_server.py due to hastily release for minecraft server functionality
 
 ## [0.0.1] - 2023-04-27
 

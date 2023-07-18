@@ -10,8 +10,12 @@ class MinecraftServer(commands.Cog):
         self.bot = bot
         # global variables
         load_dotenv()
+        global INSTANCE_ID, ec2
         INSTANCE_ID = os.getenv('INSTANCE_ID')
-        ec2 = boto3.resource('ec2')
+        AWS_REGION = os.getenv('AWS_REGION')
+        AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+        ec2 = boto3.client('ec2', region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
     
     # Start the aws ec2 server if user has the role "Minecraft Moderator"

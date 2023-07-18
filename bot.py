@@ -62,12 +62,18 @@ async def roll(ctx, arg, operator='+', modifier=0):
 
 # import cogs
 async def load_cogs():
+    # load only minecraft_server cog till others are finished
+    await bot.load_extension("cogs.minecraft_server")
+    #print load with timestamp
+    now = datetime.datetime.now()
+    print(f"{now.strftime('%Y-%m-%d %H:%M:%S')} INFO     Loaded minecraft_server.py")
+""" # load all cogs    
     for f in os.listdir("./cogs"):
         if f.endswith(".py"):
             await bot.load_extension(f"cogs.{f[:-3]}")
             #print load with timestamp
             now = datetime.datetime.now()
-            print(f"{now.strftime('%Y-%m-%d %H:%M:%S')} INFO     Loaded {f}")
+            print(f"{now.strftime('%Y-%m-%d %H:%M:%S')} INFO     Loaded {f}")"""
 
 # run bot (leave at bottom)
 async def main():

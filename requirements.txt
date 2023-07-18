@@ -1,0 +1,5 @@
+# list of all python dependency requirements
+pandas
+discord.py
+python-dotenv
+boto3
