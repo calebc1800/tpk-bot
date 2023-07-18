@@ -6,15 +6,26 @@ import random
 import asyncio
 import discord
 import logging
+import boto3
 from discord.ext import commands
 from dotenv import load_dotenv
+from botocore.exceptions import ClientError
 
 # load environment variables
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+CREATOR_ID = os.getenv('CREATOR_ID')
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
+
+# Server variables
+MINECRAFT_INSTANCE_ID = os.getenv('MINECRAFT_INSTANCE_ID')
+BOT_INSTANCE_ID = os.getenv('BOT_INSTANCE_ID')
+AWS_REGION = os.getenv('AWS_REGION')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+ec2 = boto3.client('ec2', region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
 # logging
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -67,6 +78,26 @@ async def roll(ctx, arg, operator='+', modifier=0):
         await ctx.send(f'Rolls: {rolls}\nSum: {sum(rolls)} - {modifier} = {sum(rolls) - int(modifier)}')
     else:
         await ctx.send(f'Computing error')
+
+# STSSD
+@bot.command(name='stssd', help='A special command only to be used by the creator')
+async def stssd(ctx):
+    # check for keyword
+    if ctx.author.id == 221426191796535299:
+        await ctx.send('Time to shut the shit show down')
+        # shutdown both the bot server and minecraft server
+        try:
+            ec2.stop_instance(InstanceIds=[MINECRAFT_INSTANCE_ID], DryRun=False)
+        except ClientError as e:
+                await ctx.send("Can't stop the mine!")
+        try:
+            ec2.stop_instances(InstanceIds=[BOT_INSTANCE_ID], DryRun=False)
+        except ClientError as e:
+            if 'DryRunOperation' not in str(e):
+                await ctx.send("Well shit, that didn't work.")
+                raise
+    else:
+        await ctx.send('You are not the creator')
 
 # import cogs
 async def load_cogs():
