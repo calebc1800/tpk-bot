@@ -17,7 +17,22 @@ class MinecraftServer(commands.Cog):
         AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
         ec2 = boto3.client('ec2', region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
-    
+    # minecraft server info command
+    @commands.command(name="mine.info", help="Displays the Minecraft Server Info")
+    async def server_info(self, ctx):
+        await ctx.send("Minecraft Server Info:\nIP: 3.82.83.59\nPort: 25565\nVersion: 1.20.1\n")
+
+    @commands.command(name="mine.status", help="Displays the Minecraft Server Status")
+    async def server_status(self, ctx):
+        ec2_status = ec2.describe_instance_status(InstanceIds=[INSTANCE_ID])
+        status = ""
+        for i in ec2_status['InstanceStatuses']:
+            status = i['InstanceState']['Name']
+        if status == "running":
+            await ctx.send("Minecraft Server Status: " + status)
+        else:
+            await ctx.send("Minecraft Server Status: stopped")
+
     # Start the aws ec2 server if user has the role "Minecraft Moderator"
     @commands.command(name="mine.start", help="Starts the Minecraft Server")
     @commands.has_role("Minecraft Moderator")
